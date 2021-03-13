@@ -13,11 +13,6 @@ def get_account():
 
     return json.loads(r.content)
 
-def get_orders():
-    r = requests.get(ORDERS_URL, headers=HEADERS)
-
-    return json.loads(r.content)
-
 def create_order(symbol, qty, side, type, time_in_force):
     data = {
         'symbol': symbol,
@@ -31,9 +26,24 @@ def create_order(symbol, qty, side, type, time_in_force):
 
     return json.loads(r.content)
 
+def get_orders():
+    r = requests.get(ORDERS_URL, headers=HEADERS)
+
+    return json.loads(r.content)
+
+def cancel_order(order_id):
+    orders_url_id = '{}/'.format(ORDERS_URL) + order_id
+
+    r = requests.delete(orders_url_id, headers=HEADERS)
+
+    return r
+
 #response = create_order('SE', 100, 'buy', 'market', 'gtc')
-#print(response)
-response = create_order('AAPL', 100, 'buy', 'market', 'gtc')
+#response = create_order('AAPL', 100, 'buy', 'market', 'gtc')
 
 orders = get_orders()
 print(orders)
+
+confirmation = cancel_order('id_for_your_order')
+print('\n\nConfirmation:')
+print(confirmation)
